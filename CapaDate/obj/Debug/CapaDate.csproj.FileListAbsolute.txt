@@ -1,0 +1,9 @@
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\bin\Debug\CapaDate.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\bin\Debug\CapaDate.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\obj\Debug\CapaDate.csproj.AssemblyReference.cache
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\obj\Debug\CapaDate.csproj.CoreCompileInputs.cache
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\obj\Debug\CapaDate.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\obj\Debug\CapaDate.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\bin\Debug\CapaEntity.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\bin\Debug\CapaEntity.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaDate\obj\Debug\CapaDate.csproj.Up2Date

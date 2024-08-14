@@ -1,0 +1,11 @@
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\bin\Debug\CapaNegocio.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\bin\Debug\CapaNegocio.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\obj\Debug\CapaNegocio.csproj.AssemblyReference.cache
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\obj\Debug\CapaNegocio.csproj.CoreCompileInputs.cache
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\obj\Debug\CapaNegocio.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\obj\Debug\CapaNegocio.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\bin\Debug\CapaDate.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\bin\Debug\CapaEntity.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\bin\Debug\CapaDate.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\bin\Debug\CapaEntity.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaNegocio\obj\Debug\CapaNego.81B9D119.Up2Date

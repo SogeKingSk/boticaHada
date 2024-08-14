@@ -1,0 +1,6 @@
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaEntity\bin\Debug\CapaEntity.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaEntity\bin\Debug\CapaEntity.pdb
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaEntity\obj\Debug\CapaEntity.csproj.AssemblyReference.cache
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaEntity\obj\Debug\CapaEntity.csproj.CoreCompileInputs.cache
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaEntity\obj\Debug\CapaEntity.dll
+F:\BOTICA HADA\SISTEMA_ESCRITORIO\CapaEntity\obj\Debug\CapaEntity.pdb
