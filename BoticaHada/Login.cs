@@ -18,6 +18,7 @@ namespace BoticaHada
         public Login()
         {
             InitializeComponent();
+            this.AcceptButton = btnIngresar;
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)
@@ -54,5 +55,22 @@ namespace BoticaHada
             txtPassword.Text = "";
             this.Show();
         }
+
+        private void txtPassword_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDocumento_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }

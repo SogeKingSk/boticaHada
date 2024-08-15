@@ -16,7 +16,7 @@ namespace CapaEntity
         public string Correo { get; set; }
         public string Telefono { get; set; }
         public string Clave { get; set; }
-        public Rol IdRol { get; set; }
+        public Rol oRol { get; set; }
         public bool Estado { get; set; }
         public string FechaRegistro { get; set; }
 

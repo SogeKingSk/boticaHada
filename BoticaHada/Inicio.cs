@@ -19,9 +19,10 @@ namespace BoticaHada
         private static Usuario usuarioActual;
         private static IconMenuItem menuActivo = null;
         private static Form formularioActivo = null;
-        public Inicio(Usuario oUsuario)
+        public Inicio(Usuario oUsuario =null)
         {
-            usuarioActual = oUsuario;
+            if (oUsuario == null) usuarioActual = new Usuario() { Nombre = "HOLA", IdUsuario = 1 };
+            else usuarioActual = oUsuario;
 
             InitializeComponent();
         }
@@ -46,10 +47,13 @@ namespace BoticaHada
         {
             if (menuActivo != null)
             {
-                menuActivo.BackColor = Color.White;
+                menuActivo.BackColor = Color.FromArgb(33, 15, 85);
+                menuActivo.ForeColor = ColorTranslator.FromHtml("#7376BD");
             }
 
-            menu.BackColor = Color.Silver;
+            menu.BackColor = ColorTranslator.FromHtml("#281269");
+            menu.ForeColor  = menu.IconColor;
+            
             menuActivo = menu;
             if (formularioActivo != null)
             {
@@ -60,7 +64,7 @@ namespace BoticaHada
             formulario.TopLevel = false;
             formulario.FormBorderStyle = FormBorderStyle.None;
             formulario.Dock = DockStyle.Fill;
-            formulario.BackColor = Color.SteelBlue;
+            formulario.BackColor = ColorTranslator.FromHtml("#1C0E49");
             contenedor.Controls.Add(formulario);
             formulario.Show();
         }
@@ -109,5 +113,7 @@ namespace BoticaHada
         {
             AbrirFormulario((IconMenuItem)menuCompra, new frmDetalleCompra());
         }
+
+        
     }
 }
