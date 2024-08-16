@@ -110,7 +110,7 @@ namespace BoticaHada
                     ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString(),
                     ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString(),
                     });
-
+                    MessageBox.Show("Nuevo Usuario agregado correctamente", "Nuevo Usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Limpiar();
                 }
                 else
@@ -120,10 +120,12 @@ namespace BoticaHada
             }
             else
             {
+
                 bool resultado = new CNUsuario().Editar(oUsuario,out mensaje);
 
                 if (resultado == true)
                 {
+
                     DataGridViewRow row = dgvData.Rows[Convert.ToInt32(txtIndice.Text)];
                     row.Cells["Id"].Value = txtId.Text;
                     row.Cells["Documento"].Value = txtDocumento.Text;
@@ -139,6 +141,7 @@ namespace BoticaHada
                     row.Cells["Estado"].Value = ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString();
 
 
+                    MessageBox.Show("Usuario modificado correctamente", "Editar Usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Limpiar();
                 }
                 else
@@ -154,6 +157,7 @@ namespace BoticaHada
 
         private void Limpiar()
         {
+            lblDetalleUsuario.Text = "Detalle usuario";
             txtIndice.Text = "-1";
             txtId.Text = "0";
             txtDocumento.Text = "";
@@ -187,7 +191,7 @@ namespace BoticaHada
                 e.Graphics.DrawImage(Properties.Resources.pngwing_com, new Rectangle(x, y, w, h));
                 e.Handled = true;
             }
-        }
+        }   
 
         private void dgvData_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -196,6 +200,8 @@ namespace BoticaHada
                 int indice = e.RowIndex;
                 if (indice >= 0)
                 {
+
+                    lblDetalleUsuario.Text = "Editando...";
                     txtIndice.Text = indice.ToString();
                     txtId.Text = dgvData.Rows[indice].Cells["Id"].Value.ToString();
                     txtDocumento.Text = dgvData.Rows[indice].Cells["Documento"].Value.ToString();
