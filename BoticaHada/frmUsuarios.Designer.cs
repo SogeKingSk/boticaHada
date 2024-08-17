@@ -71,12 +71,12 @@
             this.label14 = new System.Windows.Forms.Label();
             this.cboBusqueda = new System.Windows.Forms.ComboBox();
             this.txtBusqueda = new System.Windows.Forms.TextBox();
+            this.txtIndice = new System.Windows.Forms.TextBox();
             this.btnLimpiarBuscador = new FontAwesome.Sharp.IconButton();
             this.btnBuscar = new FontAwesome.Sharp.IconButton();
             this.btnEliminar = new FontAwesome.Sharp.IconButton();
             this.btnLimpiar = new FontAwesome.Sharp.IconButton();
             this.btnGuardar = new FontAwesome.Sharp.IconButton();
-            this.txtIndice = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,6 +106,7 @@
             // txtDocumento
             // 
             this.txtDocumento.Location = new System.Drawing.Point(33, 63);
+            this.txtDocumento.MaxLength = 50;
             this.txtDocumento.Name = "txtDocumento";
             this.txtDocumento.Size = new System.Drawing.Size(216, 20);
             this.txtDocumento.TabIndex = 2;
@@ -114,6 +115,7 @@
             // txtNombre
             // 
             this.txtNombre.Location = new System.Drawing.Point(33, 113);
+            this.txtNombre.MaxLength = 50;
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(216, 20);
             this.txtNombre.TabIndex = 4;
@@ -133,6 +135,7 @@
             // txtApellidoPaterno
             // 
             this.txtApellidoPaterno.Location = new System.Drawing.Point(33, 163);
+            this.txtApellidoPaterno.MaxLength = 50;
             this.txtApellidoPaterno.Name = "txtApellidoPaterno";
             this.txtApellidoPaterno.Size = new System.Drawing.Size(216, 20);
             this.txtApellidoPaterno.TabIndex = 6;
@@ -152,6 +155,7 @@
             // txtApellidoMaterno
             // 
             this.txtApellidoMaterno.Location = new System.Drawing.Point(33, 213);
+            this.txtApellidoMaterno.MaxLength = 50;
             this.txtApellidoMaterno.Name = "txtApellidoMaterno";
             this.txtApellidoMaterno.Size = new System.Drawing.Size(216, 20);
             this.txtApellidoMaterno.TabIndex = 8;
@@ -171,6 +175,7 @@
             // txtCorreo
             // 
             this.txtCorreo.Location = new System.Drawing.Point(33, 263);
+            this.txtCorreo.MaxLength = 50;
             this.txtCorreo.Name = "txtCorreo";
             this.txtCorreo.Size = new System.Drawing.Size(216, 20);
             this.txtCorreo.TabIndex = 10;
@@ -190,6 +195,7 @@
             // txtTelefono
             // 
             this.txtTelefono.Location = new System.Drawing.Point(33, 313);
+            this.txtTelefono.MaxLength = 50;
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(216, 20);
             this.txtTelefono.TabIndex = 12;
@@ -210,6 +216,7 @@
             // txtClave
             // 
             this.txtClave.Location = new System.Drawing.Point(33, 363);
+            this.txtClave.MaxLength = 50;
             this.txtClave.Name = "txtClave";
             this.txtClave.PasswordChar = '*';
             this.txtClave.Size = new System.Drawing.Size(216, 20);
@@ -230,6 +237,7 @@
             // txtConfirmarClave
             // 
             this.txtConfirmarClave.Location = new System.Drawing.Point(33, 413);
+            this.txtConfirmarClave.MaxLength = 50;
             this.txtConfirmarClave.Name = "txtConfirmarClave";
             this.txtConfirmarClave.PasswordChar = '*';
             this.txtConfirmarClave.Size = new System.Drawing.Size(216, 20);
@@ -264,6 +272,7 @@
             this.cboRol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRol.FormattingEnabled = true;
             this.cboRol.Location = new System.Drawing.Point(33, 463);
+            this.cboRol.MaxLength = 50;
             this.cboRol.Name = "cboRol";
             this.cboRol.Size = new System.Drawing.Size(216, 21);
             this.cboRol.TabIndex = 18;
@@ -273,6 +282,7 @@
             this.cboEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEstado.FormattingEnabled = true;
             this.cboEstado.Location = new System.Drawing.Point(33, 513);
+            this.cboEstado.MaxLength = 50;
             this.cboEstado.Name = "cboEstado";
             this.cboEstado.Size = new System.Drawing.Size(216, 21);
             this.cboEstado.TabIndex = 19;
@@ -488,10 +498,20 @@
             // 
             this.txtBusqueda.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBusqueda.Location = new System.Drawing.Point(826, 45);
+            this.txtBusqueda.MaxLength = 50;
             this.txtBusqueda.Name = "txtBusqueda";
             this.txtBusqueda.Size = new System.Drawing.Size(198, 20);
             this.txtBusqueda.TabIndex = 32;
             this.txtBusqueda.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBusqueda_KeyDown);
+            // 
+            // txtIndice
+            // 
+            this.txtIndice.Location = new System.Drawing.Point(180, 32);
+            this.txtIndice.Name = "txtIndice";
+            this.txtIndice.Size = new System.Drawing.Size(31, 20);
+            this.txtIndice.TabIndex = 33;
+            this.txtIndice.Text = "-1";
+            this.txtIndice.Visible = false;
             // 
             // btnLimpiarBuscador
             // 
@@ -585,15 +605,6 @@
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // txtIndice
-            // 
-            this.txtIndice.Location = new System.Drawing.Point(180, 32);
-            this.txtIndice.Name = "txtIndice";
-            this.txtIndice.Size = new System.Drawing.Size(31, 20);
-            this.txtIndice.TabIndex = 33;
-            this.txtIndice.Text = "-1";
-            this.txtIndice.Visible = false;
             // 
             // frmUsuarios
             // 
