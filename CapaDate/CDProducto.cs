@@ -20,7 +20,7 @@ namespace CapaDate
                 {
                     StringBuilder query = new StringBuilder();
 
-                    query.AppendLine("select IdProducto,Codigo,Nombre,Lote,RegistroSanitario,FechaVencimiento,Descripcion,Stock,Ubicacion,PrecioCompra,PrecioVenta,Estado from PRODUCTO");
+                    query.AppendLine("select IdProducto,Codigo,Nombre,Lote,RegistroSanitario,FechaVencimiento,Descripcion,Ubicacion,Estado from PRODUCTO");
                     
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
@@ -41,9 +41,6 @@ namespace CapaDate
                                 FechaVencimiento = Convert.ToDateTime(dr["FechaVencimiento"]),
                                 Descripcion = dr["Descripcion"].ToString(),
                                 Ubicacion = dr["Ubicacion"].ToString(),
-                                Stock = Convert.ToInt32(dr["Stock"]),
-                                PrecioCompra = Convert.ToDecimal(dr["PrecioCompra"]),
-                                PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
                                 Estado = Convert.ToBoolean(dr["Estado"])
                                
                             }); 
@@ -75,9 +72,7 @@ namespace CapaDate
                     cmd.Parameters.AddWithValue("RegistroSanitario", oProducto.RegistroSanitario);
                     cmd.Parameters.AddWithValue("FechaVencimiento", oProducto.FechaVencimiento);
                     cmd.Parameters.AddWithValue("Descripcion", oProducto.Descripcion);
-                    cmd.Parameters.AddWithValue("Stock", oProducto.Stock);
                     cmd.Parameters.AddWithValue("Ubicacion", oProducto.Ubicacion);
-                    cmd.Parameters.AddWithValue("PrecioVenta", oProducto.PrecioVenta);
                     cmd.Parameters.AddWithValue("Estado", oProducto.Estado);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
@@ -120,9 +115,7 @@ namespace CapaDate
                     cmd.Parameters.AddWithValue("RegistroSanitario", oProducto.RegistroSanitario);
                     cmd.Parameters.AddWithValue("FechaVencimiento", oProducto.FechaVencimiento);
                     cmd.Parameters.AddWithValue("Descripcion", oProducto.Descripcion);
-                    cmd.Parameters.AddWithValue("Stock", oProducto.Stock);
                     cmd.Parameters.AddWithValue("Ubicacion", oProducto.Ubicacion);
-                    cmd.Parameters.AddWithValue("PrecioVenta", oProducto.PrecioVenta);
                     cmd.Parameters.AddWithValue("Estado", oProducto.Estado);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;

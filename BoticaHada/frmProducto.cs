@@ -61,10 +61,7 @@ namespace BoticaHada
                     item.RegistroSanitario,
                     item.FechaVencimiento.ToString("dd/MM/yyyy"),
                     item.Descripcion,
-                    item.Stock,
                     item.Ubicacion,
-                    item.PrecioVenta,
-                    item.PrecioCompra,
                     item.Estado == true ? "Activo":"No Activo",
                     item.Estado == true ? 1: 0,
                 });
@@ -74,16 +71,7 @@ namespace BoticaHada
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            int stock = 0;
-            decimal precioVenta = 0.0m;
-            if (!int.TryParse(txtStock.Text, out stock))
-            {
-                stock = 0; // Valor predeterminado si no se puede convertir
-            }
-            if (!decimal.TryParse(txtPrecioVenta.Text, out precioVenta))
-            {
-                precioVenta = 0.0m; // Valor predeterminado si no se puede convertir
-            }
+            
             string mensaje = string.Empty;
             Producto oProducto = new Producto()
             {
@@ -94,9 +82,7 @@ namespace BoticaHada
                 RegistroSanitario = txtRegistroSanitario.Text,
                 FechaVencimiento = dtpFechaVencimiento.Value.Date,
                 Descripcion = txtDescripcion.Text,
-                Stock = stock,
                 Ubicacion = txtUbicacion.Text,
-                PrecioVenta = precioVenta,
                 Estado = Convert.ToInt32(((OpcionCombo)cboEstado.SelectedItem).Valor) == 1 ? true : false,
 
             };
@@ -115,10 +101,7 @@ namespace BoticaHada
                         txtRegistroSanitario.Text,
                         dtpFechaVencimiento.Value.Date.ToString("dd/MM/yyyy"),
                         txtDescripcion.Text,
-                        stock.ToString(),
                         txtUbicacion.Text,
-                        precioVenta.ToString("F2"),
-                        "0.00",
                         ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString(),
                         ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString(),
                         });
@@ -146,9 +129,7 @@ namespace BoticaHada
                     row.Cells["RegistroSanitario"].Value = txtRegistroSanitario.Text;
                     row.Cells["FechaVencimiento"].Value = dtpFechaVencimiento.Value.ToString("dd/MM/yyyy");
                     row.Cells["Descripcion"].Value = txtDescripcion.Text;
-                    row.Cells["Stock"].Value = stock.ToString();
                     row.Cells["Ubicacion"].Value = txtUbicacion.Text;
-                    row.Cells["PrecioVenta"].Value = precioVenta.ToString("F2");
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString();
                     row.Cells["Estado"].Value = ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString();
 
@@ -175,9 +156,7 @@ namespace BoticaHada
             txtRegistroSanitario.Text = "";
             dtpFechaVencimiento.Value = DateTime.Today;
             txtDescripcion.Text = "";
-            txtStock.Text = "0";
             txtUbicacion.Text = "";
-            txtPrecioVenta.Text = "0.00";
             cboEstado.SelectedIndex = 0;
             txtCodigo.Select();
 
@@ -219,9 +198,7 @@ namespace BoticaHada
                     txtRegistroSanitario.Text = dgvData.Rows[indice].Cells["RegistroSanitario"].Value.ToString();
                     dtpFechaVencimiento.Text = dgvData.Rows[indice].Cells["FechaVencimiento"].Value.ToString();
                     txtDescripcion.Text = dgvData.Rows[indice].Cells["Descripcion"].Value.ToString();
-                    txtStock.Text = dgvData.Rows[indice].Cells["Stock"].Value.ToString();
                     txtUbicacion.Text = dgvData.Rows[indice].Cells["Ubicacion"].Value.ToString();
-                    txtPrecioVenta.Text = dgvData.Rows[indice].Cells["PrecioVenta"].Value.ToString();
 
                     
 
@@ -381,6 +358,18 @@ namespace BoticaHada
                         throw;
                     }
                 }
+            }
+        }
+
+        private void txtCodigo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) // Verifica si se presionó "Enter"
+            {
+                e.Handled = true; // Maneja el evento
+                e.SuppressKeyPress = true; // Suprime el "beep" por defecto
+
+                // Mueve el foco al siguiente TextBox
+                txtNombre.Focus();
             }
         }
     }
