@@ -86,7 +86,7 @@ namespace BoticaHada
 
         private void submenuRegistrarCompras_Click(object sender, EventArgs e)
         {
-            AbrirFormulario((IconMenuItem)menuCompra, new frmCompras());
+            AbrirFormulario((IconMenuItem)menuCompra, new frmCompras(usuarioActual));
         }
 
         
@@ -113,7 +113,7 @@ namespace BoticaHada
 
         private void menuPresentacion_Click(object sender, EventArgs e)
         {
-            AbrirFormulario((IconMenuItem)menuCompra, new frmPresentacion());
+            AbrirFormulario((IconMenuItem)sender, new frmPresentacion());
         }
     }
 }

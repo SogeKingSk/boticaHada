@@ -167,6 +167,38 @@ namespace CapaDate
             return respuesta;
 
         }
+
+        public Proveedor BuscarProveedorPorRuc(string ruc)
+        {
+            Proveedor proveedor = null;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_BUSCARPROVEEDOR", oconexion);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@RUC", ruc);
+
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            proveedor = new Proveedor()
+                            {
+                                IdProveedor = Convert.ToInt32(dr["IdProveedor"]),
+                                RazonSocial = dr["RazonSocial"].ToString()
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejar la excepción
+                }
+            }
+            return proveedor;
+        }
     }
 }
 

@@ -86,5 +86,9 @@ namespace CapaNegocio
         {
             return oCDProveedor.Eliminar(oProveedor, out Mensaje);
         }
+        public Proveedor BuscarProveedor(string ruc)
+        {
+            return oCDProveedor.BuscarProveedorPorRuc(ruc);
+        }
     }
 }

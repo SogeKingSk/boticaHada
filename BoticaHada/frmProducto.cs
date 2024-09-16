@@ -332,9 +332,6 @@ namespace BoticaHada
                         row.Cells[7].Value.ToString(),
                         row.Cells[8].Value.ToString(),
                         row.Cells[9].Value.ToString(),
-                        row.Cells[10].Value.ToString(),
-                        row.Cells[11].Value.ToString(),
-                        row.Cells[12].Value.ToString(),
                     });
                 }
 

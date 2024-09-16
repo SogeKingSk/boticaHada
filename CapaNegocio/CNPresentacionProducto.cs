@@ -41,5 +41,10 @@ namespace CapaNegocio
         {
             return oCDPresentacionProducto.BuscarProductoPorCodigo(codigo);
         }
+
+        public PresentacionProducto BuscarProductoQR(string codigo)
+        {
+            return oCDPresentacionProducto.BuscarProductoPorCodigoQR(codigo);
+        }
     }
 }

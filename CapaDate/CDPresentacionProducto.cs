@@ -209,5 +209,45 @@ namespace CapaDate
             return producto;
         }
 
+        public PresentacionProducto BuscarProductoPorCodigoQR(string codigo)
+        {
+            PresentacionProducto pproducto = null;
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_BUSCAR_PRODUCTO_UNIDAD", oconexion);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Codigo", codigo);
+
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            pproducto = new PresentacionProducto()
+                            {
+                                oProducto = new Producto
+                                {
+                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    Nombre = dr["Nombre"].ToString(),
+                                },
+                                Stock = Convert.ToInt32(dr["Stock"]),
+                                PrecioCompra = Convert.ToDecimal(dr["PrecioCompra"]),
+                                PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                                
+
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejar la excepción
+                }
+            }
+            return pproducto;
+        }
+
     }
 }

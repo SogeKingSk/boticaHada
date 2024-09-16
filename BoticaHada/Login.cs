@@ -23,7 +23,6 @@ namespace BoticaHada
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            List<Usuario> TEST = new CNUsuario().Listar();
 
             Usuario ousuario = new CNUsuario().Listar().Where(u=>u.Documento == txtDocumento.Text && u.Clave == txtPassword.Text).FirstOrDefault();
 
@@ -71,6 +70,9 @@ namespace BoticaHada
 
         }
 
-        
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

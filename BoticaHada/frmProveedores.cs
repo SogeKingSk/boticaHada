@@ -266,5 +266,23 @@ namespace BoticaHada
                 e.SuppressKeyPress = true; // Evita el sonido de "ding" en la interfaz
             }
         }
+
+        private void txtTelefono_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo dígitos y la tecla de retroceso
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Cancela la entrada si no es un dígito
+            }
+        }
+
+        private void txtRuc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo dígitos y la tecla de retroceso
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Cancela la entrada si no es un dígito
+            }
+        }
     }
 }

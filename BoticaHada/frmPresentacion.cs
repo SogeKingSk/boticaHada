@@ -1,6 +1,7 @@
 ﻿using BoticaHada.Utilidades;
 using CapaEntity;
 using CapaNegocio;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,6 +76,7 @@ namespace BoticaHada
             txtIdProducto.Text = "0";
             txtCodigo.Text = "";
             txtNombre.Text = "";
+            cboPresentacion.SelectedIndex = 0;
             nudCantidad.Value = 0;
             nudStock.Value = 0;
             nudPrecioCompra.Value = 0;
@@ -182,7 +184,7 @@ namespace BoticaHada
                 Cantidad = Convert.ToInt32(nudCantidad.Value),
                 Stock = Convert.ToInt32(nudStock.Value),
                 PrecioCompra = Convert.ToDecimal(nudPrecioCompra.Value),
-                PrecioVenta = Convert.ToInt32(nudPrecioVenta.Value),
+                PrecioVenta = Convert.ToDecimal(nudPrecioVenta.Value),
 
             };
 
@@ -288,6 +290,66 @@ namespace BoticaHada
             }
         }
 
-        
+        private void btnDescargarExcel_Click(object sender, EventArgs e)
+        {
+            {
+                if (dgvData.Rows.Count < 1)
+                {
+                    MessageBox.Show("No hay datos para exportar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    DataTable dt = new DataTable();
+                    foreach (DataGridViewColumn columna in dgvData.Columns)
+                    {
+                        if (columna.HeaderText != "" && columna.Visible) dt.Columns.Add(columna.HeaderText, typeof(string));
+                    }
+
+                    foreach (DataGridViewRow row in dgvData.Rows)
+                    {
+                        if (row.Visible) dt.Rows.Add(new object[]
+                        {
+                        row.Cells[3].Value.ToString(),
+                        row.Cells[4].Value.ToString(),
+                        row.Cells[5].Value.ToString(),
+                        row.Cells[6].Value.ToString(),
+                        row.Cells[7].Value.ToString(),
+                        row.Cells[8].Value.ToString(),
+                        row.Cells[9].Value.ToString(),
+                        });
+                    }
+
+                    SaveFileDialog savefile = new SaveFileDialog();
+                    savefile.FileName = string.Format("ReporteProductoStock_{0}.xlsx", DateTime.Now.ToString("ddMMyyyyHHmmss"));
+                    savefile.Filter = "Excel Files | *.xlsx";
+
+                    if (savefile.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            XLWorkbook wb = new XLWorkbook();
+                            var hoja = wb.Worksheets.Add(dt, "Informe");
+                            hoja.ColumnsUsed().AdjustToContents();
+                            wb.SaveAs(savefile.FileName);
+                            MessageBox.Show("Reporte Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Error al generar reporte", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void txtBusqueda_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnBuscar.PerformClick(); // Simula un clic en el botón btnBuscar
+                e.SuppressKeyPress = true; // Evita el sonido de "ding" en la interfaz
+            }
+        }
     }
 }
