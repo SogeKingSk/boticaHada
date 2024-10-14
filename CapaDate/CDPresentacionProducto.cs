@@ -74,8 +74,8 @@ namespace CapaDate
                     cmd.Parameters.AddWithValue("TipoPresentacion", oPresentacionProducto.TipoPresentacion);
                     cmd.Parameters.AddWithValue("Cantidad", oPresentacionProducto.Cantidad);
                     cmd.Parameters.AddWithValue("Stock", oPresentacionProducto.Stock);
-                    cmd.Parameters.AddWithValue("PrecioVenta", oPresentacionProducto.PrecioVenta);
                     cmd.Parameters.AddWithValue("PrecioCompra", oPresentacionProducto.PrecioCompra);
+                    cmd.Parameters.AddWithValue("PrecioVenta", oPresentacionProducto.PrecioVenta);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -115,8 +115,8 @@ namespace CapaDate
                     cmd.Parameters.AddWithValue("TipoPresentacion", oPresentacionProducto.TipoPresentacion);
                     cmd.Parameters.AddWithValue("Stock", oPresentacionProducto.Stock);
                     cmd.Parameters.AddWithValue("Cantidad", oPresentacionProducto.Cantidad);
-                    cmd.Parameters.AddWithValue("PrecioVenta", oPresentacionProducto.PrecioVenta);
                     cmd.Parameters.AddWithValue("PrecioCompra", oPresentacionProducto.PrecioCompra);
+                    cmd.Parameters.AddWithValue("PrecioVenta", oPresentacionProducto.PrecioVenta);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;

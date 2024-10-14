@@ -27,6 +27,36 @@ namespace BoticaHada
             dgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
+        private int paginaActual = 1;
+        private int filasPorPagina = 20;
+        private int totalPaginas = 1;
+        private List<PresentacionProducto> listaPresentacionProductoPaginada = new List<PresentacionProducto>();
+        private List<DataGridViewRow> listaFiltrada = new List<DataGridViewRow>();
+        private void CargarDatosPaginados()
+        {
+
+            // Obtener el número total de páginas
+            totalPaginas = (int)Math.Ceiling((double)listaPresentacionProductoPaginada.Count / filasPorPagina);
+
+            // Limpiar DataGridView antes de cargar
+            dgvData.Rows.Clear();
+
+            // Calcular el rango de filas que se mostrarán en la página actual
+            int inicio = (paginaActual - 1) * filasPorPagina;
+            int fin = Math.Min(inicio + filasPorPagina, listaPresentacionProductoPaginada.Count);
+
+            for (int i = inicio; i < fin; i++)
+            {
+                PresentacionProducto item = listaPresentacionProductoPaginada[i];
+                dgvData.Rows.Add(new object[] {
+                "", item.IdPresentacionProducto, item.oProducto.IdProducto, item.oProducto.Codigo, item.oProducto.Nombre,
+                item.TipoPresentacion, item.Cantidad, item.Stock, item.PrecioCompra,item.PrecioVenta 
+                });
+            }
+
+            // Mostrar estado de paginación
+            lblPagina.Text = $"Página {paginaActual} de {totalPaginas}";
+        }
         private void frmPresentacion_Load(object sender, EventArgs e)
         {
             cboPresentacion.Items.Add(new OpcionCombo() { Valor = "UNIDAD", Texto = "Unidad" });
@@ -47,7 +77,7 @@ namespace BoticaHada
             cboBusqueda.DisplayMember = "Texto";
             cboBusqueda.ValueMember = "Valor";
             cboBusqueda.SelectedIndex = 0;
-
+            /*
             List<PresentacionProducto> listaPresentacionProducto = new CNPresentacionProducto().Listar();
 
             foreach (PresentacionProducto item in listaPresentacionProducto)
@@ -65,7 +95,10 @@ namespace BoticaHada
                     item.PrecioVenta,
                 });
 
-            }
+            }*/
+
+            listaPresentacionProductoPaginada = new CNPresentacionProducto().Listar();
+            CargarDatosPaginados();
         }
 
         private void Limpiar()
@@ -82,6 +115,7 @@ namespace BoticaHada
             nudPrecioCompra.Value = 0;
             nudPrecioVenta.Value = 0;
             txtCodigo.Select();
+            txtCodigo.ReadOnly = false;
 
         }
 
@@ -123,6 +157,7 @@ namespace BoticaHada
                     nudPrecioCompra.Value = Convert.ToDecimal(dgvData.Rows[indice].Cells["PrecioCompra"].Value);
                     nudPrecioVenta.Value = Convert.ToDecimal(dgvData.Rows[indice].Cells["PrecioVenta"].Value);
 
+                    txtCodigo.ReadOnly = true;
 
                     foreach (OpcionCombo oc in cboPresentacion.Items)
                     {
@@ -141,14 +176,17 @@ namespace BoticaHada
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string columnaFiltro = ((OpcionCombo)cboBusqueda.SelectedItem).Valor.ToString();
+            listaFiltrada.Clear();
             if (dgvData.Rows.Count > 0)
             {
                 foreach (DataGridViewRow row in dgvData.Rows)
                 {
                     if (row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(txtBusqueda.Text.Trim().ToUpper()))
 
+                    {                       
                         row.Visible = true;
-
+                        listaFiltrada.Add(row); 
+                    }
                     else row.Visible = false;
 
                 }
@@ -194,10 +232,31 @@ namespace BoticaHada
 
                 if (idPproductogenerado != 0)
                 {
-                    dgvData.Rows.Add(new object[]{"",idPproductogenerado,txtIdProducto.Text, txtCodigo.Text,txtNombre.Text,
+
+                    oPresentacionProducto.IdPresentacionProducto = idPproductogenerado; 
+                    oPresentacionProducto.oProducto.Codigo = txtCodigo.Text;  // Asegúrate de que el código se almacena
+                    oPresentacionProducto.oProducto.Nombre = txtNombre.Text;
+                    listaPresentacionProductoPaginada.Add(oPresentacionProducto);
+                    if (listaPresentacionProductoPaginada.Count <= paginaActual * filasPorPagina)
+                    {
+                        dgvData.Rows.Add(new object[] {
+                            "", oPresentacionProducto.IdPresentacionProducto,
+                            txtIdProducto.Text,
+                            txtCodigo.Text,
+                            txtNombre.Text,
+                            ((OpcionCombo)cboPresentacion.SelectedItem).Valor.ToString(),
+                            oPresentacionProducto.Cantidad,
+                            oPresentacionProducto.Stock,
+                            oPresentacionProducto.PrecioCompra,
+                            oPresentacionProducto.PrecioVenta
+                        });
+                        
+                    }
+
+                    /*dgvData.Rows.Add(new object[]{"",idPproductogenerado,txtIdProducto.Text, txtCodigo.Text,txtNombre.Text,
                         ((OpcionCombo)cboPresentacion.SelectedItem).Valor.ToString(),
                         nudCantidad.Text,nudStock.Text,nudPrecioCompra.Text,nudPrecioVenta.Text,
-                    });
+                    });*/
                     MessageBox.Show("Nueva Presentacion agregada correctamente", "Nueva Presentacion", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Limpiar();
                 }
@@ -213,7 +272,13 @@ namespace BoticaHada
 
                 if (resultado == true)
                 {
-
+                    int index = listaPresentacionProductoPaginada.FindIndex(u => u.IdPresentacionProducto == oPresentacionProducto.IdPresentacionProducto);
+                    if (index >= 0)
+                    {
+                        listaPresentacionProductoPaginada[index] = oPresentacionProducto;
+                        listaPresentacionProductoPaginada[index].oProducto.Codigo = txtCodigo.Text; // Asegúrate de que se actualiza el código
+                        listaPresentacionProductoPaginada[index].oProducto.Nombre = txtNombre.Text;
+                    }
                     DataGridViewRow row = dgvData.Rows[Convert.ToInt32(txtIndice.Text)];
                     row.Cells["Id"].Value = txtId.Text;
                     row.Cells["IdProducto"].Value = txtIdProducto.Text;
@@ -224,7 +289,6 @@ namespace BoticaHada
                     row.Cells["PrecioCompra"].Value = nudPrecioCompra.Text;
                     row.Cells["PrecioVenta"].Value = nudPrecioVenta.Text;
                     row.Cells["TipoPresentacion"].Value = ((OpcionCombo)cboPresentacion.SelectedItem).Valor.ToString();
-
 
                     MessageBox.Show("Presentacion modificada correctamente", "Editar Presentacion", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Limpiar();
@@ -293,7 +357,7 @@ namespace BoticaHada
         private void btnDescargarExcel_Click(object sender, EventArgs e)
         {
             {
-                if (dgvData.Rows.Count < 1)
+                if (listaFiltrada.Count < 1)
                 {
                     MessageBox.Show("No hay datos para exportar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
@@ -305,7 +369,7 @@ namespace BoticaHada
                         if (columna.HeaderText != "" && columna.Visible) dt.Columns.Add(columna.HeaderText, typeof(string));
                     }
 
-                    foreach (DataGridViewRow row in dgvData.Rows)
+                    foreach (DataGridViewRow row in listaFiltrada)
                     {
                         if (row.Visible) dt.Rows.Add(new object[]
                         {
@@ -349,6 +413,24 @@ namespace BoticaHada
             {
                 btnBuscar.PerformClick(); // Simula un clic en el botón btnBuscar
                 e.SuppressKeyPress = true; // Evita el sonido de "ding" en la interfaz
+            }
+        }
+
+        private void btnIzquierda_Click(object sender, EventArgs e)
+        {
+            if (paginaActual > 1)
+            {
+                paginaActual--;
+                CargarDatosPaginados();
+            }
+        }
+
+        private void btnDerecha_Click(object sender, EventArgs e)
+        {
+            if (paginaActual < totalPaginas)
+            {
+                paginaActual++;
+                CargarDatosPaginados();
             }
         }
     }

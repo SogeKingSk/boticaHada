@@ -27,6 +27,41 @@ namespace BoticaHada
             dgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
+        private int paginaActual = 1;
+        private int filasPorPagina = 20;
+        private int totalPaginas = 1;
+        private List<Producto> listaProductoPaginada = new List<Producto>(); 
+        private List<DataGridViewRow> listaFiltrada = new List<DataGridViewRow>();
+
+
+        private void CargarDatosPaginados()
+        {
+
+            // Obtener el número total de páginas
+            totalPaginas = (int)Math.Ceiling((double)listaProductoPaginada.Count / filasPorPagina);
+
+            // Limpiar DataGridView antes de cargar
+            dgvData.Rows.Clear();
+
+            // Calcular el rango de filas que se mostrarán en la página actual
+            int inicio = (paginaActual - 1) * filasPorPagina;
+            int fin = Math.Min(inicio + filasPorPagina, listaProductoPaginada.Count);
+
+            for (int i = inicio; i < fin; i++)
+            {
+                Producto item = listaProductoPaginada[i];
+                dgvData.Rows.Add(new object[] {
+                "", item.IdProducto, item.Codigo, item.Nombre, item.Lote,
+                item.RegistroSanitario, item.FechaVencimiento.ToString("dd/MM/yyyy"), item.Descripcion, item.Ubicacion,
+                item.Estado ? "Activo" : "No Activo",
+                item.Estado ? 1 : 0
+                });
+            }
+
+            // Mostrar estado de paginación
+            lblPagina.Text = $"Página {paginaActual} de {totalPaginas}";
+        }
+
         private void frmProducto_Load(object sender, EventArgs e)
         {
             cboEstado.Items.Add(new OpcionCombo() { Valor = 1, Texto = "Activo" });
@@ -48,7 +83,7 @@ namespace BoticaHada
             cboBusqueda.SelectedIndex = 0;
 
             //Mostrar todos los usuarios
-            List<Producto> listaProducto = new CNProducto().Listar();
+            /*List<Producto> listaProducto = new CNProducto().Listar();
 
             foreach (Producto item in listaProducto)
             {
@@ -66,12 +101,16 @@ namespace BoticaHada
                     item.Estado == true ? 1: 0,
                 });
 
-            }
+            }*/
+
+
+            listaProductoPaginada = new CNProducto().Listar();
+            CargarDatosPaginados();
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            
+
             string mensaje = string.Empty;
             Producto oProducto = new Producto()
             {
@@ -94,17 +133,29 @@ namespace BoticaHada
 
                 if (idusuariogenerado != 0)
                 {
-                    dgvData.Rows.Add(new object[]{"",idusuariogenerado,
-                        txtCodigo.Text,
-                        txtNombre.Text,
-                        txtLote.Text,
-                        txtRegistroSanitario.Text,
-                        dtpFechaVencimiento.Value.Date.ToString("dd/MM/yyyy"),
-                        txtDescripcion.Text,
-                        txtUbicacion.Text,
-                        ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString(),
-                        ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString(),
+                    // Agregar el nuevo usuario a la lista paginada
+                    oProducto.IdProducto = idusuariogenerado;
+                    listaProductoPaginada.Add(oProducto);
+
+                    // Si el nuevo usuario pertenece a la página actual, lo agregamos al DataGridView
+                    if (listaProductoPaginada.Count <= paginaActual * filasPorPagina)
+                    {
+                        dgvData.Rows.Add(new object[] {
+                            "", oProducto.IdProducto,
+                            oProducto.Codigo,
+                            oProducto.Nombre,
+                            oProducto.Lote,
+                            oProducto.RegistroSanitario,
+                            oProducto.FechaVencimiento.ToString("dd/MM/yyyy"),
+                            oProducto.Descripcion,
+                            oProducto.Ubicacion,
+                            oProducto.Estado ? "Activo" : "No Activo",
+                            oProducto.Estado ? 1 : 0
                         });
+                        /*dgvData.Rows.Add(new object[]{"",idusuariogenerado, txtCodigo.Text,txtNombre.Text, txtLote.Text,txtRegistroSanitario.Text,dtpFechaVencimiento.Value.Date.ToString("dd/MM/yyyy"),
+                            txtDescripcion.Text, txtUbicacion.Text, ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString(),((OpcionCombo)cboEstado.SelectedItem).Valor.ToString(),});*/
+
+                    }
                     MessageBox.Show("Nuevo Producto agregado correctamente", "Nuevo Producto", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Limpiar();
                 }
@@ -112,6 +163,7 @@ namespace BoticaHada
                 {
                     MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                
             }
             else
             {
@@ -120,7 +172,11 @@ namespace BoticaHada
 
                 if (resultado == true)
                 {
-
+                    int index = listaProductoPaginada.FindIndex(u => u.IdProducto == oProducto.IdProducto);
+                    if (index >= 0)
+                    {
+                        listaProductoPaginada[index] = oProducto;
+                    }
                     DataGridViewRow row = dgvData.Rows[Convert.ToInt32(txtIndice.Text)];
                     row.Cells["Id"].Value = txtId.Text;
                     row.Cells["Codigo"].Value = txtCodigo.Text;
@@ -143,6 +199,7 @@ namespace BoticaHada
                 }
 
             }
+            
         }
 
         private void Limpiar()
@@ -251,14 +308,17 @@ namespace BoticaHada
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string columnaFiltro = ((OpcionCombo)cboBusqueda.SelectedItem).Valor.ToString();
+            listaFiltrada.Clear();
+
             if (dgvData.Rows.Count > 0)
             {
                 foreach (DataGridViewRow row in dgvData.Rows)
                 {
                     if (row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(txtBusqueda.Text.Trim().ToUpper()))
-
+                    { 
                         row.Visible = true;
-
+                        listaFiltrada.Add(row);
+                    }
                     else row.Visible = false;
 
                 }
@@ -308,21 +368,23 @@ namespace BoticaHada
 
         private void btnDescargarExcel_Click(object sender, EventArgs e)
         {
-            if (dgvData.Rows.Count < 1)
+
+
+            if (listaFiltrada.Count < 1)
             {
                 MessageBox.Show("No hay datos para exportar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            else 
-            { 
+            else
+            {
                 DataTable dt = new DataTable();
                 foreach (DataGridViewColumn columna in dgvData.Columns)
                 {
-                    if(columna.HeaderText != "" && columna.Visible) dt.Columns.Add(columna.HeaderText,typeof(string));
+                    if (columna.HeaderText != "" && columna.Visible) dt.Columns.Add(columna.HeaderText, typeof(string));
                 }
-                    
-                foreach (DataGridViewRow row in dgvData.Rows)
+
+                foreach (DataGridViewRow row in listaFiltrada)
                 {
-                    if (row.Visible) dt.Rows.Add(new object[]
+                    dt.Rows.Add(new object[]
                     {
                         row.Cells[2].Value.ToString(),
                         row.Cells[3].Value.ToString(),
@@ -336,20 +398,20 @@ namespace BoticaHada
                 }
 
                 SaveFileDialog savefile = new SaveFileDialog();
-                savefile.FileName = string.Format("ReporteProducto_{0}.xlsx",DateTime.Now.ToString("ddMMyyyyHHmmss"));
+                savefile.FileName = string.Format("ReporteProducto_{0}.xlsx", DateTime.Now.ToString("ddMMyyyyHHmmss"));
                 savefile.Filter = "Excel Files | *.xlsx";
 
-                if(savefile.ShowDialog() == DialogResult.OK)
+                if (savefile.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
                         XLWorkbook wb = new XLWorkbook();
-                        var hoja = wb.Worksheets.Add(dt,"Informe");
+                        var hoja = wb.Worksheets.Add(dt, "Informe");
                         hoja.ColumnsUsed().AdjustToContents();
                         wb.SaveAs(savefile.FileName);
                         MessageBox.Show("Reporte Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch 
+                    catch
                     {
                         MessageBox.Show("Error al generar reporte", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         throw;
@@ -357,6 +419,8 @@ namespace BoticaHada
                 }
             }
         }
+
+
 
         private void txtCodigo_KeyDown(object sender, KeyEventArgs e)
         {
@@ -367,6 +431,25 @@ namespace BoticaHada
 
                 // Mueve el foco al siguiente TextBox
                 txtNombre.Focus();
+            }
+        }
+
+        private void btnIzquierda_Click(object sender, EventArgs e)
+        {
+            if (paginaActual > 1)
+            {
+                paginaActual--;
+                CargarDatosPaginados();
+            }
+        }
+
+        private void btnDerecha_Click(object sender, EventArgs e)
+        {
+            
+            if (paginaActual < totalPaginas)
+            {
+                paginaActual++;
+                CargarDatosPaginados();
             }
         }
     }

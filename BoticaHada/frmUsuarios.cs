@@ -24,6 +24,39 @@ namespace BoticaHada
             // Ajuste automático de las filas
             dgvData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
+        private int paginaActual = 1;
+        private int filasPorPagina = 20;
+        private int totalPaginas = 1;
+        private List<Usuario> listaUsuariosPaginada = new List<Usuario>();
+        private void CargarDatosPaginados()
+        {
+
+            // Obtener el número total de páginas
+            totalPaginas = (int)Math.Ceiling((double)listaUsuariosPaginada.Count / filasPorPagina);
+
+            // Limpiar DataGridView antes de cargar
+            dgvData.Rows.Clear();
+
+            // Calcular el rango de filas que se mostrarán en la página actual
+            int inicio = (paginaActual - 1) * filasPorPagina;
+            int fin = Math.Min(inicio + filasPorPagina, listaUsuariosPaginada.Count);
+
+            for (int i = inicio; i < fin; i++)
+            {
+                Usuario item = listaUsuariosPaginada[i];
+                dgvData.Rows.Add(new object[] {
+                "", item.IdUsuario, item.Documento, item.Nombre, item.Clave,
+                item.ApellidoPaterno, item.ApellidoMaterno, item.Correo, item.Telefono,
+                item.oRol.IdRol, item.oRol.Descripcion,
+                item.Estado ? "Activo" : "No Activo",
+                item.Estado ? 1 : 0
+                });
+            }
+
+            // Mostrar estado de paginación
+            lblPagina.Text = $"Página {paginaActual} de {totalPaginas}";
+        }
+
 
         private void frmUsuarios_Load(object sender, EventArgs e)
         {
@@ -57,20 +90,8 @@ namespace BoticaHada
             cboBusqueda.SelectedIndex = 0;
 
             //Mostrar todos los usuarios
-            List<Usuario> listaUsuario = new CNUsuario().Listar();
-
-            foreach (Usuario item in listaUsuario)
-            {
-
-                dgvData.Rows.Add(new object[]{"",item.IdUsuario,item.Documento,item.Nombre, item.Clave,item.ApellidoPaterno,
-                item.ApellidoMaterno,item.Correo,item.Telefono,
-                item.oRol.IdRol,
-                item.oRol.Descripcion,
-                item.Estado == true ? "Activo":"No Activo",
-                item.Estado == true ? 1: 0,
-                });
-
-            }
+            listaUsuariosPaginada = new CNUsuario().Listar();
+            CargarDatosPaginados();
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -103,13 +124,27 @@ namespace BoticaHada
 
                 if (idusuariogenerado != 0)
                 {
-                    dgvData.Rows.Add(new object[]{"",idusuariogenerado,txtDocumento.Text,txtNombre.Text, txtClave.Text,txtApellidoPaterno.Text,
-                    txtApellidoMaterno.Text,txtCorreo.Text,txtTelefono.Text,
-                    ((OpcionCombo)cboRol.SelectedItem).Valor.ToString(),
-                    ((OpcionCombo)cboRol.SelectedItem).Texto.ToString(),
-                    ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString(),
-                    ((OpcionCombo)cboEstado.SelectedItem).Valor.ToString(),
-                    });
+                    /* dgvData.Rows.Add(new object[]{"",idusuariogenerado,txtDocumento.Text,txtNombre.Text, txtClave.Text,txtApellidoPaterno.Text,
+                     txtApellidoMaterno.Text,txtCorreo.Text,txtTelefono.Text,((OpcionCombo)cboRol.SelectedItem).Valor.ToString(),((OpcionCombo)cboRol.SelectedItem).Texto.ToString(),
+                     ((OpcionCombo)cboEstado.SelectedItem).Texto.ToString(),((OpcionCombo)cboEstado.SelectedItem).Valor.ToString(),});*/
+
+                    // Agregar el nuevo usuario a la lista paginada
+                    oUsuario.IdUsuario = idusuariogenerado;
+                    listaUsuariosPaginada.Add(oUsuario);
+
+                    // Si el nuevo usuario pertenece a la página actual, lo agregamos al DataGridView
+                    if (listaUsuariosPaginada.Count <= paginaActual * filasPorPagina)
+                    {
+                        dgvData.Rows.Add(new object[] {
+                            "", oUsuario.IdUsuario, oUsuario.Documento, oUsuario.Nombre, oUsuario.Clave,
+                            oUsuario.ApellidoPaterno, oUsuario.ApellidoMaterno, oUsuario.Correo, oUsuario.Telefono,
+                            oUsuario.oRol.IdRol,((OpcionCombo)cboRol.SelectedItem).Texto.ToString(),
+                            oUsuario.Estado ? "Activo" : "No Activo",
+                            oUsuario.Estado ? 1 : 0
+                        });
+                    }
+
+
                     MessageBox.Show("Nuevo Usuario agregado correctamente", "Nuevo Usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Limpiar();
                 }
@@ -125,6 +160,14 @@ namespace BoticaHada
 
                 if (resultado == true)
                 {
+                    // Actualizar el usuario en la lista paginada
+                    int index = listaUsuariosPaginada.FindIndex(u => u.IdUsuario == oUsuario.IdUsuario);
+                    if (index >= 0)
+                    {
+                        listaUsuariosPaginada[index] = oUsuario;
+                    }
+
+                    // Actualizar la fila correspondiente en el DataGridView
 
                     DataGridViewRow row = dgvData.Rows[Convert.ToInt32(txtIndice.Text)];
                     row.Cells["Id"].Value = txtId.Text;
@@ -150,8 +193,6 @@ namespace BoticaHada
                 }
 
             }
-
-
 
         }
 
@@ -319,6 +360,24 @@ namespace BoticaHada
             {
                 btnBuscar.PerformClick(); // Simula un clic en el botón btnBuscar
                 e.SuppressKeyPress = true; // Evita el sonido de "ding" en la interfaz
+            }
+        }
+
+        private void btnIzquierda_Click(object sender, EventArgs e)
+        {
+            if (paginaActual > 1)
+            {
+                paginaActual--;
+                CargarDatosPaginados();
+            }
+        }
+
+        private void btnDerecha_Click(object sender, EventArgs e)
+        {
+            if (paginaActual < totalPaginas)
+            {
+                paginaActual++;
+                CargarDatosPaginados();
             }
         }
     }
